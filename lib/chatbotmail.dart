@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:project/configuration/configuration.dart';
 
-class ChatBotPage extends StatefulWidget {
+class ChatBotMail extends StatefulWidget {
+  const ChatBotMail({super.key});
+
   @override
   _ChatBotPageState createState() => _ChatBotPageState();
 }
 
-class _ChatBotPageState extends State<ChatBotPage> {
+class _ChatBotPageState extends State<ChatBotMail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           'Title',
                           style: TextStyle(

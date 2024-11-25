@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatefulWidget {
+  const SettingPage({super.key});
+
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -11,7 +13,6 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 216, 216, 216),
         ),
@@ -20,13 +21,10 @@ class _SettingPageState extends State<SettingPage> {
           children: [
             Column(
               children: [
-                SizedBox(height: 20.0),
                 buildAccountButton(),
-                SizedBox(height: 20.0),
                 buildAccountButton(),
               ],
             ),
-            buildLogoutButton(),
           ],
         ),
       ),
@@ -34,45 +32,20 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget buildAccountButton() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          backgroundColor:
-              Colors.white, // Ganti 'primary' dengan 'backgroundColor'
-          foregroundColor:
-              Colors.black, // Ganti 'onPrimary' dengan 'foregroundColor'
-          side: BorderSide(color: Colors.black),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.symmetric(
+              horizontal:
+                  BorderSide(color: const Color.fromARGB(255, 232, 232, 232))),
         ),
-        child: Text('Akun', style: TextStyle(fontSize: 18)),
-      ),
-    );
-  }
-
-  Widget buildLogoutButton() {
-    return Container(
-      width: 150,
-      child: ElevatedButton(
-        onPressed: () {
-          // Tambahkan logika logout di sini
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 15.0),
-          backgroundColor:
-              Colors.white, // Ganti 'primary' dengan 'backgroundColor'
-          foregroundColor:
-              Colors.black, // Ganti 'onPrimary' dengan 'foregroundColor'
-          side: BorderSide(color: Colors.black),
+        child: Text(
+          'Akun',
+          style: TextStyle(fontSize: 18),
         ),
-        child: Text('LogOut', style: TextStyle(fontSize: 18)),
       ),
     );
   }

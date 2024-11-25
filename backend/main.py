@@ -1,54 +1,104 @@
-from flask import Flask, jsonify, Response
+import numpy as np
 import cv2
 import os
 from datetime import datetime
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import base64
 
 app = Flask(__name__)
+CORS(app)
 
-# Load cascades for face and eye detection
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+class FaceDetector:
+    def __init__(self):
+        self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        self.eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+        self.save_dir = r'D:\flutter app\projectPCDWPL\backend\wajah'
+        self.contrast_factor = 2.0
+        
+        if not os.path.exists(self.save_dir):
+            os.makedirs(self.save_dir)
 
-# Directory to save captured images
-save_dir = r'backend\captured_faces'
-if not os.path.exists(save_dir):
-    os.makedirs(save_dir)
+    def process_frame(self, frame):
+        frame = cv2.convertScaleAbs(frame, alpha=self.contrast_factor, beta=0)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+        
+        result = []
+        saved_face = False
+        
+        for (x, y, w, h) in faces:
+            roi_gray = gray[y:y+h, x:x+w]
+            eyes = self.eye_cascade.detectMultiScale(roi_gray)
+            
+            face_data = {
+                "status": "Face detected",
+                "bounding_box": {
+                    "x": int(x),
+                    "y": int(y),
+                    "w": int(w),
+                    "h": int(h)
+                },
+                "eyes": [],
+                "saved": False
+            }
+            
+            if len(eyes) >= 2:
+                face_data["status"] = "Face and eyes detected"
+                for (ex, ey, ew, eh) in eyes:
+                    face_data["eyes"].append({
+                        "x": int(x + ex),
+                        "y": int(y + ey),
+                        "w": int(ew),
+                        "h": int(eh)
+                    })
+                
+                if not saved_face:
+                    margin = 20
+                    x_save = max(x - margin, 0)
+                    y_save = max(y - margin, 0)
+                    w_save = min(w + 2 * margin, frame.shape[1] - x_save)
+                    h_save = min(h + 2 * margin, frame.shape[0] - y_save)
+                    
+                    face_image = frame[y_save:y_save+h_save, x_save:x_save+w_save].copy()
+                    current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                    image_path = os.path.join(self.save_dir, f'wajah_{current_time}.jpg')
+                    cv2.imwrite(image_path, face_image)
+                    
+                    face_data["status"] = "Face captured and saved"
+                    face_data["saved"] = True
+                    saved_face = True
+            else:
+                face_data["status"] = "Face detected, positioning eyes..."
+                
+            result.append(face_data)
+            
+        if not result:
+            result.append({
+                "status": "No face detected", 
+                "bounding_box": None,
+                "eyes": [],
+                "saved": False
+            })
+            
+        return result
 
-# Capture from webcam
-cap = cv2.VideoCapture(0)
+detector = FaceDetector()
 
-@app.route('/detect', methods=['GET'])
+@app.route('/detect', methods=['POST'])
 def detect():
-    ret, frame = cap.read()
-    if not ret:
-        return jsonify({"error": "Failed to capture image"}), 500
-
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
-    result = []
-
-    for (x, y, w, h) in faces:
-        # Detect eyes within the face ROI
-        roi_gray = gray[y:y + h, x:x + w]
-        eyes = eye_cascade.detectMultiScale(roi_gray)
-
-        # Check if two eyes are detected
-        if len(eyes) >= 2:
-            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            image_path = os.path.join(save_dir, f'face_{timestamp}.jpg')
-            cv2.imwrite(image_path, frame[y:y + h, x:x + w])
-            result.append({"status": "Face detected", "path": image_path})
-
-    if not result:
-        result = [{"status": "No face detected"}]
+    if 'image' not in request.files:
+        return jsonify({"error": "No image provided"}), 400
+        
+    image_file = request.files['image']
+    nparr = np.frombuffer(image_file.read(), np.uint8)
+    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    
+    if frame is None:
+        return jsonify({"error": "Invalid image"}), 400
+        
+    result = detector.process_frame(frame)
     return jsonify(result)
 
-@app.route('/stop', methods=['GET'])
-def stop():
-    cap.release()
-    cv2.destroyAllWindows()
-    return jsonify({"status": "Camera stopped"})
-
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=5000)
-
+    app.run(host='0.0.0.0', port=5000, debug=True)

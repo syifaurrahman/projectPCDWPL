@@ -32,6 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
     
+    
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -40,9 +41,10 @@ dependencies:
   curved_navigation_bar: ^1.0.6
   bloc: ^8.1.4
   flutter_gemini: ^2.0.5
-  url_launcher: ^6.0.0
   http: ^1.2.2
   camera: ^0.11.0+2
+  url_launcher: ^6.1.8
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +74,8 @@ flutter:
     - assets/images/image1.png
     - assets/images/image2.png
     - assets/images/image3.png
+    - assets/images/Chatbot.jpeg
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:project/chatbotmail.dart';
+import 'package:project/chatbotpage.dart';
 import 'package:project/homepage.dart';
 import 'package:project/chatbotverif.dart';
 import 'package:project/setting.dart';
@@ -38,9 +37,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     SettingPage(),
+    ChatBotPage(),
     HomePage(),
     MailPage(),
-    ChatBotPage(),
+    ChatBotMail(),
   ];
   int _currentIndex = 0;
 
@@ -105,6 +105,15 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: BorderRadius.circular(30),
             ),
             child: Icon(Icons.mail,
+                color: const Color.fromARGB(255, 43, 41, 43), size: 24),
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 216, 216, 216),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Icon(Icons.dangerous,
                 color: const Color.fromARGB(255, 43, 41, 43), size: 24),
           ),
         ],

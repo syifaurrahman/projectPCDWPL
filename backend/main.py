@@ -4,7 +4,6 @@ import os
 from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -14,13 +13,11 @@ class FaceDetector:
         self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         self.eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
         self.save_dir = r'D:\flutter app\projectPCDWPL\backend\wajah'
-        self.contrast_factor = 2.0
         
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir)
 
     def process_frame(self, frame):
-        frame = cv2.convertScaleAbs(frame, alpha=self.contrast_factor, beta=0)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
         

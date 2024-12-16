@@ -43,7 +43,7 @@ class _SettingPageState extends State<SettingPage> {
                   BorderSide(color: const Color.fromARGB(255, 232, 232, 232))),
         ),
         child: Text(
-          'Akun',
+          'Edit Profile',
           style: TextStyle(fontSize: 18),
         ),
       ),

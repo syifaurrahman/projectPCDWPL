@@ -44,81 +44,120 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: const Color.fromARGB(255, 216, 216, 216), // Background body
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'SELAMAT DATANG DI PELAYANAN DESA',
-                style: const TextStyle(
-                  fontFamily: 'eracake', // Gaya font Vernon Adams Anton
-                  fontSize: 30, // Ukuran font
-                  fontWeight: FontWeight.w500, // Ketebalan teks
-                  color: Color.fromARGB(255, 33, 33, 33), // Warna teks
-                  shadows: [
-                    Shadow(
-                      offset: Offset(2, 2),
-                      blurRadius: 4,
-                      color: Color.fromARGB(120, 128, 128, 128),
+      body: Stack(
+        children: [
+          Container(
+            color: const Color.fromARGB(255, 216, 216, 216), // Background body
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'SELAMAT DATANG DI PELAYANAN DESA',
+                    style: const TextStyle(
+                      fontFamily: 'eracake', // Gaya font Vernon Adams Anton
+                      fontSize: 30, // Ukuran font
+                      fontWeight: FontWeight.w500, // Ketebalan teks
+                      color: Color.fromARGB(255, 33, 33, 33), // Warna teks
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2, 2),
+                          blurRadius: 4,
+                          color: Color.fromARGB(120, 128, 128, 128),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                textAlign: TextAlign.center, // Menengahkan teks
-              ),
-              const SizedBox(height: 20), // Jarak antara teks dan container
-              Container(
-                width: 465,
-                height: 250,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color.fromARGB(255, 255, 255, 255)),
-                  borderRadius:
-                      BorderRadius.circular(20), // Mengatur radius sudut
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                      20), // Sesuaikan border radius di sini juga
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: 3, // Sesuaikan jumlah gambar
-                    itemBuilder: (context, index) {
-                      // Array path gambar
-                      final images = [
-                        'assets/images/image1.png',
-                        'assets/images/image2.png',
-                        'assets/images/image3.png',
-                      ];
-                      return AnimatedBuilder(
-                        animation: _pageController,
-                        builder: (context, child) {
-                          // Menghitung posisi
-                          double value = 1.0;
-                          if (_pageController.position.haveDimensions) {
-                            value = _pageController.page! - index;
-                            value = (value + 1).clamp(0.0, 1.0);
-                          }
-                          // Membuat efek fade dan scale
-                          return Opacity(
-                            opacity: value,
-                            child: Transform(
-                              transform: Matrix4.identity()
-                                ..scale(value, value),
-                              alignment: Alignment.center,
-                              child:
-                                  Image.asset(images[index], fit: BoxFit.cover),
-                            ),
+                    textAlign: TextAlign.center, // Menengahkan teks
+                  ),
+                  const SizedBox(height: 20), // Jarak antara teks dan container
+                  Container(
+                    width: 465,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      border:
+                          Border.all(color: Color.fromARGB(255, 255, 255, 255)),
+                      borderRadius:
+                          BorderRadius.circular(20), // Mengatur radius sudut
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          20), // Sesuaikan border radius di sini juga
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: 3, // Sesuaikan jumlah gambar
+                        itemBuilder: (context, index) {
+                          // Array path gambar
+                          final images = [
+                            'assets/images/image1.png',
+                            'assets/images/image2.png',
+                            'assets/images/image3.png',
+                          ];
+                          return AnimatedBuilder(
+                            animation: _pageController,
+                            builder: (context, child) {
+                              // Menghitung posisi
+                              double value = 1.0;
+                              if (_pageController.position.haveDimensions) {
+                                value = _pageController.page! - index;
+                                value = (value + 1).clamp(0.0, 1.0);
+                              }
+                              // Membuat efek fade dan scale
+                              return Opacity(
+                                opacity: value,
+                                child: Transform(
+                                  transform: Matrix4.identity()
+                                    ..scale(value, value),
+                                  alignment: Alignment.center,
+                                  child: Image.asset(images[index],
+                                      fit: BoxFit.cover),
+                                ),
+                              );
+                            },
                           );
                         },
-                      );
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50), // Jarak di bawah container
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 20,
+            right: 20,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: Offset(2, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Login",
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                  IconButton(
+                    icon:
+                        const Icon(Icons.login, size: 30, color: Colors.black),
+                    onPressed: () {
+                      Navigator.pushNamed(context,
+                     '/login'); // Ganti '/login' sesuai dengan rute ke form login
                     },
                   ),
-                ),
+                ],
               ),
-              const SizedBox(height: 50), // Jarak di bawah container
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -86,15 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
               color: const Color.fromARGB(255, 216, 216, 216),
               borderRadius: BorderRadius.circular(30),
             ),
-            child: Icon(Icons.account_circle_sharp,
-                color: const Color.fromARGB(255, 43, 41, 43), size: 24),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 216, 216, 216),
-              borderRadius: BorderRadius.circular(30),
-            ),
             child: Icon(Icons.message_outlined,
                 color: const Color.fromARGB(255, 43, 41, 43), size: 24),
           ),
@@ -104,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: const Color.fromARGB(255, 216, 216, 216),
               borderRadius: BorderRadius.circular(30),
             ),
-            child: Icon(Icons.mail,
+            child: Icon(Icons.account_circle_sharp,
                 color: const Color.fromARGB(255, 43, 41, 43), size: 24),
           ),
           Container(
@@ -113,7 +104,16 @@ class _HomeScreenState extends State<HomeScreen> {
               color: const Color.fromARGB(255, 216, 216, 216),
               borderRadius: BorderRadius.circular(30),
             ),
-            child: Icon(Icons.dangerous,
+            child: Icon(Icons.camera_alt,
+                color: const Color.fromARGB(255, 43, 41, 43), size: 24),
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 216, 216, 216),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Icon(Icons.mail,
                 color: const Color.fromARGB(255, 43, 41, 43), size: 24),
           ),
         ],

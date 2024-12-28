@@ -139,7 +139,7 @@ class _MailPageState extends State<MailPage> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.78.7:5000/detect'),
+        Uri.parse('http://192.168.1.11:5000/detect'),
       );
 
       request.files.add(
